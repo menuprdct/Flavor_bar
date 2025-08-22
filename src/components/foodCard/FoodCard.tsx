@@ -87,7 +87,7 @@ export default function FoodCard({ item }: { item: FoodItem }) {
         <CardTitle className="mt-2">{item.name}</CardTitle>
         <div className="flex items-center justify-between mt-1">
           <span className="text-lg font-semibold">
-            {t("price")}: ${item.price.toFixed(2)}
+            {t("price")}: EGP{item.price.toFixed(2)}
           </span>
           <span>
             {renderStars(averageRating)}{" "}

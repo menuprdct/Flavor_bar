@@ -4,14 +4,6 @@ import { translations } from "@/assets/data/translator";
 import { createContext, useState, useMemo, Dispatch, SetStateAction } from "react";
 
 type Language = "en" | "ar";
-
-type Translations = {
-  [key in Language]: {
-    [key: string]: string;
-  };
-};
-
-
 interface LangContextType {
   lang: Language;
   dir: "ltr" | "rtl";
