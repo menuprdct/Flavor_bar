@@ -1,5 +1,5 @@
 "use client";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase";
-import { LangContext } from "@/contexts/LangContext";
 import ImageSlider3D from "../imageSlider/ImageSlider3D";
 import { FoodItem } from "@/types/types";
 import { renderStars } from "../helpers/renderStars";
@@ -28,17 +27,15 @@ export default function FoodCard({ item }: { item: FoodItem }) {
   const [authSent, setAuthSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [reviews, setReviews] = useState(item.reviews);
-  const { t, dir } = useContext(LangContext);
 
   const averageRating =
     reviews.length > 0
       ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
       : 0;
 
-  // Check user on mount
-  useState(() => {
+  useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
-  });
+  }, []);
 
   async function handleAuth() {
     if (!email) return;
@@ -68,7 +65,7 @@ export default function FoodCard({ item }: { item: FoodItem }) {
   }
 
   return (
-    <Card className="w-full max-w-[320px] mx-auto my-4 shadow-lg" dir={dir}>
+    <Card className="w-full max-w-[320px] mx-auto my-4 shadow-lg" dir="rtl">
       <CardHeader>
         <div
           className="relative w-full aspect-[4/3] rounded-lg overflow-hidden cursor-pointer"
@@ -84,43 +81,41 @@ export default function FoodCard({ item }: { item: FoodItem }) {
             sizes="320px"
           />
         </div>
-        <CardTitle className="mt-2">{item.name}</CardTitle>
-        <div className="flex items-center justify-between mt-1">
-          <span className="text-lg font-semibold">
-            {t("price")}: EGP{item.price.toFixed(2)}
-          </span>
-          <span>
-            {renderStars(averageRating)}{" "}
-            <span className="ml-1 text-sm text-muted-foreground">
-              {averageRating.toFixed(1)} / 5
-              {"  "}
-              ({Math.round((averageRating / 5) * 100)}%)
+        <CardTitle className="mt-2 text-right">{item.name}</CardTitle>
+        <div className="flex flex-col gap-1 mt-1 text-right">
+          <p className="text-sm text-gray-700">{item.desc}</p>
+          <div className="flex justify-between items-center">
+            <span className="text-lg font-semibold">{item.price.toFixed(2)} ج</span>
+            <span className="text-sm text-yellow-600 flex items-center gap-1">
+              {renderStars(averageRating)}
+              <span className="text-xs text-muted-foreground">
+                {averageRating.toFixed(1)} / 5 ({Math.round((averageRating / 5) * 100)}%)
+              </span>
             </span>
-          </span>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-2 mb-2">
+        <div className="flex gap-2 mb-2 justify-end">
           <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
-            {t("add_review")}
+            أضف تقييم
           </Button>
-          <Button
-            variant="secondary"
-            onClick={() => setIsReviewsDialogOpen(true)}
-          >
-            {t("view_reviews")}
+          <Button variant="secondary" onClick={() => setIsReviewsDialogOpen(true)}>
+            عرض التقييمات
           </Button>
         </div>
       </CardContent>
+
+      {/* Add Review Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent dir={dir}>
+        <DialogContent dir="rtl">
           <DialogHeader>
-            <DialogTitle>{t("add_review")}</DialogTitle>
+            <DialogTitle>أضف تقييمك</DialogTitle>
           </DialogHeader>
           {!user ? (
             <div>
               <Input
-                placeholder={t("your_email")}
+                placeholder="بريدك الإلكتروني"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={authSent}
@@ -130,10 +125,10 @@ export default function FoodCard({ item }: { item: FoodItem }) {
                 onClick={handleAuth}
                 disabled={authSent || !email}
               >
-                {authSent ? t("check_your_email") : t("send_magic_link")}
+                {authSent ? "تحقق من بريدك" : "أرسل رابط الدخول"}
               </Button>
               <div className="text-xs text-muted-foreground mt-2">
-                {t("verify_email_info")}
+                سيتم إرسال رابط تسجيل الدخول إلى بريدك الإلكتروني.
               </div>
             </div>
           ) : (
@@ -152,7 +147,7 @@ export default function FoodCard({ item }: { item: FoodItem }) {
                 onChange={(e) =>
                   setReview({ ...review, rating: Number(e.target.value) })
                 }
-                placeholder={t("rating_placeholder")}
+                placeholder="التقييم من 1 إلى 5"
                 required
               />
               <Textarea
@@ -160,22 +155,24 @@ export default function FoodCard({ item }: { item: FoodItem }) {
                 onChange={(e) =>
                   setReview({ ...review, comment: e.target.value })
                 }
-                placeholder={t("your_review")}
+                placeholder="اكتب تقييمك هنا"
                 required
               />
               <Button type="submit" disabled={submitting}>
-                {submitting ? t("submitting") : t("submit_review")}
+                {submitting ? "جاري الإرسال..." : "إرسال التقييم"}
               </Button>
             </form>
           )}
         </DialogContent>
       </Dialog>
+
+      {/* View Reviews Dialog */}
       <Dialog open={isReviewsDialogOpen} onOpenChange={setIsReviewsDialogOpen}>
-        <DialogContent dir={dir}>
+        <DialogContent dir="rtl">
           <DialogHeader>
-            <DialogTitle>{t("reviews")}</DialogTitle>
+            <DialogTitle>التقييمات</DialogTitle>
           </DialogHeader>
-          <div className="space-y-2 max-h-64 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto text-right">
             {reviews.map((r, i) => (
               <div key={i} className="border-b pb-1">
                 <div className="text-sm">{r.comment}</div>
@@ -186,19 +183,21 @@ export default function FoodCard({ item }: { item: FoodItem }) {
             ))}
             {reviews.length === 0 && (
               <div className="text-sm text-muted-foreground">
-                {t("no_reviews")}
+                لا توجد تقييمات بعد.
               </div>
             )}
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Image Slider */}
       <ImageSlider3D
         open={isSliderOpen}
         onOpenChange={setIsSliderOpen}
         images={item.image_urls}
         initialIndex={sliderIndex}
         title={item.name}
-        dir={dir as "ltr" | "rtl" | undefined}
+        dir="rtl"
       />
     </Card>
   );

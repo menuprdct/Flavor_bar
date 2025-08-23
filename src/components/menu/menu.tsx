@@ -18,6 +18,7 @@ export default function Menu() {
           name,
           price,
           image_urls,
+          desc,
           reviews (
             rating,
             comment,

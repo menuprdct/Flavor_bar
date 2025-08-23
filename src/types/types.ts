@@ -8,6 +8,7 @@ export interface FoodItem {
   id: number;
   name: string;
   price: number;
+  desc:string;
   image_urls: string[]; // changed from image_url to image_urls
   reviews: Review[];
   category?: string; // added for category filtering

@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Menu App",
-  description: "Discover our interactive, mobile-friendly digital menu. Browse food items, view ratings, and submit your own reviews — all in a smooth, multilingual experience.",
+  title: "Flavor Bar",
+  description: "كل حاجه حلوة وليها طعمها ",
 };
 
 export default function RootLayout({
@@ -35,9 +35,9 @@ export default function RootLayout({
           <LayoutWithLoader>
             <div className="flex justify-end p-4">
               <MenuHeader
-                logoUrl="https://i.ibb.co/mVkfBRkr/W-Letter.png"
-                title="Yummy Menu"
-                subtitle="Discover & Order Instantly"
+                logoUrl="https://i.ibb.co/4RDyB2hM/495445216-1019017483708459-4042802730785075468-n.jpg"
+                title="Flavor Bar"
+                subtitle="كل حاجه حلوة وليها طعمها "
               />
             </div>
             {children}

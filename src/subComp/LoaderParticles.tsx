@@ -16,7 +16,8 @@ export default function LoaderParticles({ color = "#6366f1" }: { color?: string 
         refresh
       />
       <span className="relative z-10 mt-4 text-3xl font-bold">
-        {t("loading")}
+       كل حاجه حلوة وليها طعمها 
+       <span>&#128523;</span>
       </span>
     </div>
   );

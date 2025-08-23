@@ -1,6 +1,5 @@
 'use client';
 
-import LanguageSwitcher from '@/subComp/LanguageSwitcher';
 
 interface MenuHeaderProps {
   logoUrl?: string;
@@ -9,9 +8,9 @@ interface MenuHeaderProps {
 }
 
 export default function MenuHeader({
-  logoUrl = '/logo.svg',
-  title = 'Smart Menu',
-  subtitle = 'Your digital restaurant assistant',
+  logoUrl,
+  title,
+  subtitle,
 }: MenuHeaderProps) {
   return (
     <header className="w-full px-4 py-6 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4 border-b">
@@ -27,10 +26,6 @@ export default function MenuHeader({
           <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
           <p className="text-muted-foreground text-sm">{subtitle}</p>
         </div>
-      </div>
-
-      <div className="mt-2 md:mt-0">
-        <LanguageSwitcher />
       </div>
     </header>
   );
