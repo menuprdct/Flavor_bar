@@ -4,7 +4,7 @@ import { LangContext } from "@/contexts/LangContext";
 import { Particles } from "@/components/magicui/particles"; // Adjust path if needed
 
 export default function LoaderParticles({ color = "#6366f1" }: { color?: string }) {
-  const { t, dir } = useContext(LangContext);
+  const {  dir } = useContext(LangContext);
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-background" dir={dir}>
