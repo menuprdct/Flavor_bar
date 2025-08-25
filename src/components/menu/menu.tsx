@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import FoodCard from '@/components/foodCard/FoodCard';
-import styles from './menu.module.css';
 import { FoodItem } from '@/types/types';
+import FoodList from '../foodList/foodList';
+import styles from './menu.module.css';
 
 export default function Menu() {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -18,13 +18,14 @@ export default function Menu() {
           name,
           price,
           image_urls,
+          category,
           desc,
           reviews (
             rating,
             comment,
             user_email
           )
-        `);
+        `).order('id', { ascending: true });
 
       if (error) {
         console.error('Error fetching food items:', error);
@@ -35,11 +36,10 @@ export default function Menu() {
 
     fetchFoodItems();
   }, []);
+
   return (
     <div className={styles.menuContainer}>
-      {foodItems.map((item) => (
-        <FoodCard key={item.id} item={item} />
-      ))}
+      <FoodList foodItems={foodItems} />
     </div>
   );
 }
